@@ -120,4 +120,43 @@ public class Register extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    protected void processRequest2(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+       try {
+            PrintWriter out = response.getWriter();
+            Connection con=new DBConnect().connect(getServletContext().getRealPath("/WEB-INF/config.properties"));
+         String user=request.getParameter("username");
+          String pass=request.getParameter("password");
+          String email=request.getParameter("email");
+          String about=request.getParameter("About");
+          String secret=request.getParameter("secret");
+          if(secret==null || secret.equals(""))
+          {
+              secret="nosecret";
+          }
+            try
+             {
+                   Statement stmt = con.createStatement();  
+                  stmt.executeUpdate("INSERT into users(username, password, email, About,avatar,privilege,secretquestion,secret) values ('"+user+"','"+pass+"','"+email+"','"+about+"','default.jpg','user',1,'"+secret+"')");
+                       stmt.executeUpdate("INSERT into UserMessages(recipient, sender, subject, msg) values ('"+user+"','admin','Hi','Hi<br/> This is admin of this page. <br/> Welcome to Our Forum')");
+
+                    response.sendRedirect("index.jsp");
+                               
+                }
+               catch(SQLException ex)
+                {
+                          System.out.println("SQLException: " + ex.getMessage());
+                         System.out.println("SQLState: " + ex.getSQLState());
+                         System.out.println("VendorError: " + ex.getErrorCode());
+                           
+                       }
+        
+          }
+        catch(Exception e)
+        {
+            
+        }
+    }
+    
 }
