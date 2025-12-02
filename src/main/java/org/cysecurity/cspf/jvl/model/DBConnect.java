@@ -29,6 +29,7 @@ public class DBConnect {
        String dbfullurl = properties.getProperty("dburl")+properties.getProperty("dbname");
        String jdbcdriver = properties.getProperty("jdbcdriver");
             Connection con=null;
+     
           try
                    {
                     Class.forName(jdbcdriver);
